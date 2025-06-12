@@ -1,100 +1,75 @@
-To implement Speech-to-Text in Unity, you typically integrate third-party APIs or native platform support. Here's a basic guide using Unity + C# + Google Speech API (or Windows/macOS native support as alternatives).
+# 🎤 Unity - Speech to Text Recognition System
 
----
+This Unity project enables **real-time voice-to-text transcription**, allowing users to speak through a microphone and see their words appear as text on screen. It is perfect for accessibility, voice-controlled applications, in-game chat systems, and educational tools.
 
-✅ 1. Using Google Cloud Speech-to-Text API
-🔧 Prerequisites:
-Unity (2020+)
+## 🚀 Key Features
 
-Google Cloud account
+- 🎙️ Real-time speech recognition
+- 📄 Transcribes spoken words to on-screen text
+- 🖥️ Works with Unity’s built-in microphone support
+- 🔁 Optional integration with Google Cloud or Windows Dictation APIs
+- 🔧 Modular and easy to extend or embed in other Unity projects
 
-Enable Speech-to-Text API
+## 🛠️ Technologies Used
 
-Create a Service Account, and download the JSON key
+- **Unity Engine** (Recommended: 2019.4+ or later)
+- **C#** scripting
+- Unity Microphone API / Windows DictationRecognizer
+- Optional: Google Cloud Speech-to-Text (for advanced usage)
 
----
+## 📂 Project Structure
 
-🗂️ Setup:
-Install Google.Cloud.Speech.V1 via NuGet or gRPC Unity SDK.
+```
+/UnitySpeechToText
+│
+├── Assets/
+│   ├── Scripts/
+│   │   └── SpeechToText.cs         # Main logic for recording and recognition
+│   ├── UI/
+│   │   └── TranscriptDisplay.cs    # Displays transcribed text
+│   ├── Prefabs/
+│   ├── Audio/
+│   └── Scenes/
+│       └── MainScene.unity         # Main test scene
+└── README.md
+```
 
-Place the service key JSON inside your Unity project (e.g., Assets/StreamingAssets/key.json).
+## 🧪 How to Run
 
-Set environment variable in Unity:
+1. Clone or download the repository.
+2. Open the project with **Unity Hub**.
+3. Open `MainScene.unity` inside `Assets/Scenes`.
+4. Press the **Play** button in Unity Editor.
+5. Click the **Start Listening** button in the UI.
+6. Speak into your microphone—your words will appear on screen.
 
-Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", Application.streamingAssetsPath + "/key.json");
-🧠 Sample Code:
-csharp
-Copy
-Edit
-using UnityEngine;
-using System;
-using Google.Cloud.Speech.V1;
-using System.IO;
+## 💡 Supported Options
 
-public class SpeechToText : MonoBehaviour
-{
-    void Start()
-    {
-        ConvertSpeechToText();
-    }
+| Mode                    | Description                             | Dependency              |
+|-------------------------|-----------------------------------------|--------------------------|
+| Unity Microphone API    | Basic recording, manual transcription   | Built-in                 |
+| Windows Dictation API   | Native speech-to-text on Windows        | UnityEngine.Windows.Speech |
+| Google Cloud Speech API | Accurate, multilingual support          | Requires Google setup    |
 
-    void ConvertSpeechToText()
-    {
-        var speech = SpeechClient.Create();
-        var response = speech.Recognize(new RecognitionConfig()
-        {
-            Encoding = RecognitionConfig.Types.AudioEncoding.Linear16,
-            SampleRateHertz = 16000,
-            LanguageCode = "en",
-        }, RecognitionAudio.FromFile("Assets/Audio/sample.wav")); // Provide recorded audio path
+## 🔒 Permissions
 
-        foreach (var result in response.Results)
-        {
-            foreach (var alt in result.Alternatives)
-            {
-                Debug.Log($"Transcript: {alt.Transcript}");
-            }
-        }
-    }
-}
+- ✅ Requires microphone access
+- ❌ No data is stored or sent externally (unless using cloud APIs)
 
-----
+## 🚧 Future Enhancements
 
-✅ 2. Platform-Specific Options
-🗣️ Windows (via System.Speech.Recognition)
-Works in .NET Framework on Windows:
+- Multilingual support
+- Hotword detection (e.g., “Hey Unity”)
+- Voice command trigger system
+- Transcript saving as .txt/.pdf
+- Mobile platform integration (iOS/Android)
 
-using System.Speech.Recognition;
+## 🙌 Credits
 
-SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine();
-recognizer.LoadGrammar(new DictationGrammar());
-recognizer.SetInputToDefaultAudioDevice();
-recognizer.SpeechRecognized += (s, e) => {
-    Debug.Log("Recognized: " + e.Result.Text);
-};
-recognizer.RecognizeAsync(RecognizeMode.Multiple);
+- Unity Documentation  
+- Microsoft Speech SDK  
+- Google Cloud Speech-to-Text (if used)
 
----
+## 📃 License
 
-🎙️ Android & iOS (via Plugin)
-Use plugins like:
-
-Android Speech Plugin
-
-[iOS SiriKit (via native bridge)]
-
-🔌 Recommended Plugins (Unity Asset Store)
-Speech Recognizer Plugin (Android/iOS)
-
-Azure Cognitive Services for Unity
-
-RT-Voice or SALSA LipSync (for voice input + animation)
-
-----
-
-📝 Notes
-Unity Microphone API (Microphone.Start) can be used to record audio before sending to APIs.
-
-Consider user permission handling for mobile.
-
-Handle latency and network issues gracefully.
+MIT License 
